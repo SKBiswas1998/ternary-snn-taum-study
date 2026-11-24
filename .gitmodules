@@ -1,0 +1,3 @@
+[submodule "upstream/mtj"]
+	path = upstream/mtj
+	url = https://github.com/Aref7792/MTJ-Inspired-Nonlinear-Neuron.git
