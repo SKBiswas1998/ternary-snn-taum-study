@@ -1,0 +1,30 @@
+// Ku1_tau_sweep.mx3
+// Free relaxation of m_z from near-perpendicular to in-plane, J = 0, for several Ku1.
+// Purpose: measure the leak time constant tau_l as a function of Ku1 (alpha fixed).
+// Same geometry and material as Joy's Mz_time_decay / MTJ_ku1_symmetry scripts.
+// Analyse the output with fit_tau_vs_ku1.py (needs the table.txt written next to this run).
+
+Nx := 32
+Ny := 32
+Nz := 1
+c  := 1e-9
+setgridsize(Nx, Ny, Nz)
+setcellsize(c, c, c)
+setgeom(circle(Nx*c))
+
+Msat  = 1e6
+Aex   = 1.5e-11
+alpha = 0.01            // keep fixed for this sweep
+anisU = vector(0, 0, 1)
+J     = vector(0, 0, 0) // no current: pure relaxation (leak only)
+
+tableadd(Ku1)           // Ku1 column lets the analysis split the runs
+tableautosave(10e-12)   // one row every 10 ps
+
+// Ku1 = 0, 0.5e5, ..., 5e5 J/m^3.  Critical Ku1 is about 5.6e5 (perpendicular state
+// becomes stable), so tau grows quickly as Ku1 approaches it.
+for i := 0; i <= 10; i++ {
+    Ku1 = i * 0.5e5
+    m   = uniform(0.05, 0.0, 1.0)   // small tilt; only shifts the start time, not tau
+    run(40e-9)                      // long enough for tau up to ~5 ns
+}
