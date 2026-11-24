@@ -1,0 +1,12 @@
+Using device: cpu
+[G0__readme__s2__lr0.001__e10] ep 1/10 loss 0.8194 train 81.55% val 86.19%  (281s)
+[G0__readme__s2__lr0.001__e10] ep 2/10 loss 0.5190 train 90.05% val 91.33%  (563s)
+[G0__readme__s2__lr0.001__e10] ep 3/10 loss 0.4476 train 91.99% val 92.65%  (832s)
+[G0__readme__s2__lr0.001__e10] ep 4/10 loss 0.4077 train 93.27% val 93.15%  (1096s)
+[G0__readme__s2__lr0.001__e10] ep 5/10 loss 0.3668 train 93.69% val 92.48%  (1361s)
+[G0__readme__s2__lr0.001__e10] ep 6/10 loss 0.3270 train 94.32% val 93.80%  (1624s)
+[G0__readme__s2__lr0.001__e10] ep 7/10 loss 0.3019 train 94.83% val 94.04%  (1904s)
+[G0__readme__s2__lr0.001__e10] ep 8/10 loss 0.3010 train 95.12% val 94.92%  (2210s)
+[G0__readme__s2__lr0.001__e10] ep 9/10 loss 0.2711 train 95.46% val 94.42%  (2480s)
+[G0__readme__s2__lr0.001__e10] ep 10/10 loss 0.2669 train 95.81% val 95.34%  (2760s)
+[done] G0__readme__s2__lr0.001__e10 status=ok final_val=95.34 wall=2777s
