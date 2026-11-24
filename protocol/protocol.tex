@@ -1,0 +1,309 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{url}\urlstyle{tt}\makeatletter\g@addto@macro\UrlBreaks{\do\_\do\=}\makeatother
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+\setlist{itemsep=2pt,topsep=3pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{3em}
+\renewcommand{\arraystretch}{1.18}
+\newcommand{\code}[1]{\path{#1}}
+\newcommand{\flag}[1]{\textcolor{BrickRed}{#1}}
+\newcommand{\taum}{\tau_m}
+\newcommand{\ptn}{\Delta}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\tcbset{colback=gray!6,colframe=gray!60,boxrule=0.5pt,arc=1pt,left=5pt,right=5pt,top=3pt,bottom=3pt}
+
+\title{\textbf{Pre-Registered Experimental Protocol}\\[2pt]
+\large Does the membrane time constant $\taum$ control accuracy in a ternary MTJ-inspired spiking network, and is it what anisotropy changes?}
+\author{Shuvankar Biswas \\ ECE, Rowan University}
+\date{Version 0.1 (DRAFT, not frozen) --- 23 November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{tcolorbox}
+\textbf{Status.} This is a draft. \textbf{Nothing in it has been run.} Every number marked ``assumed'' or ``prior'' is a design choice or a guess written \emph{before} data, and is there to be proven wrong. Once frozen (Appendix~D) the document may only change through logged deviations (\S\ref{sec:log}).\\
+\textbf{Drafting disclosure.} This protocol was drafted with an AI assistant. AI systems lean toward agreeing with the person they work with, so every decision rule below is numeric and mechanical, and interpretation is deferred until after analysis.
+\end{tcolorbox}
+
+\section{Purpose and scope}
+The advisor's tasks, as relayed by the student, are: (1) test whether changing the \emph{membrane} time constant $\taum$ changes accuracy; (2) explain why, in a ternary SNN, accuracy rises with magnetic anisotropy and then saturates; (3) [incomplete on the handwritten page]; (4) survey magnetism-related SNN literature.
+
+\textbf{This protocol covers tasks 1 and 2 (Stage 1).} Heterogeneous and layer-wise $\taum$, and electrically tunable $\taum$, are Stage 2 and need their own addendum (\S\ref{sec:stage2}). Task 4 is a literature table, not an experiment.
+
+\textbf{What would count as an answer.} A null result (``$\taum$ does not matter here'') or a negative result (``it matters only through the threshold'') is a complete answer. The aim is the result that is there, not the one we expect.
+
+\textbf{What this protocol cannot establish:} (a) that anisotropy changes $\taum$ in a real device (that needs relaxation data, \S\ref{sec:evidence}); (b) hardware accuracy or energy; (c) anything about Joy's own network, which we have not seen.
+
+\section{Evidence register: what we actually know}\label{sec:evidence}
+Status codes: \textbf{C} read from code; \textbf{F} read by eye from a figure in Joy's draft (approximate); \textbf{D} the drafter's derivation, untested; \textbf{U} unknown.
+
+\begin{longtable}{@{}p{0.5cm}L{7.9cm}p{0.9cm}L{5.1cm}@{}}
+\toprule
+\# & Fact or claim & Status & Source / caveat\\ \midrule\endhead
+1 & Reference network is a spiking MLP $784\to128\to64\to10$, $T=25$ steps, Adam, lr $10^{-3}$, batch 64, 10 epochs, grad-clip 1.0. & C & \code{ternary_mtj/thmtj.py} lines 46--49, 651 ff.\\
+2 & Input is the analog pixel vector, fed to \code{fc1} at \emph{every} step (constant-current encoding). Hidden neurons are the MTJ neuron; readout is the \emph{sum of signed output spikes over $T$}, fed to cross-entropy. & C & Forward pass, lines 760--930 and 1060 ff.\\
+3 & The saved checkpoint is the epoch with the best \emph{test} accuracy, and the final number is reloaded from it. & C & Lines ${\sim}$1480--1530. A winner's-curse estimate, so the published 95.89\% is likely optimistic.\\
+4 & \code{THRESHOLD}=0.8 and \code{NEG_THRESHOLD}=1.6 in the code; the README says negative threshold 0.90. Since $|m_z|\le1$, the committed code cannot emit negative spikes. & C & Lines 52, 55; README. \flag{Which setting produced 95.89\% is unknown.}\\
+5 & \code{TAU_LEAK_PS}=503.8 ps and \code{DT_PS}=100 ps, i.e.\ a leak factor $e^{-100/503.8}=0.82$ per step. & C & Lines 60--64.\\
+6 & Joy's Fig.~4a relaxation time after a pulse: ${\approx}50$--$70$ ps ($\alpha=0.1$), ${\approx}125$ ps ($0.05$), ${\approx}1.2$ ns ($0.01$). The decay is not a clean exponential. & F & Read by eye; $\pm$30\%.\\
+7 & Joy's Fig.~2 uses 100 ps pulse spacing and about 30 ps pulses, the same as the repo; its between-pulse decay is faster than a 0.82 per-step factor. & F & So the repo's leak may not match Fig.~2. $\alpha$ is not stated for Fig.~2/3.\\
+8 & Threshold current falls with $K_{u1}$ and reaches zero at $K_c\approx5.6\times10^5$ J/m$^3$ (device self-switches, no longer ternary). Pulses to reach $m_z=0.99$ fall from 34 to 20 (25 GHz, duty 0.1) between $K_{u1}=0$ and $4\times10^5$. & F & Fig.~5, 6. The firing threshold $m_z$ differs between figures (0.98, 0.99) and the repo (0.8).\\
+9 & Joy's accuracy-vs-anisotropy result: only a hand-drawn sketch has been seen. No data, dataset, network, or seed count. & U & \flag{The effect we are ``explaining'' is not yet documented.}\\
+10 & The $\alpha$ behind the repo's 503.8 ps. & U & Interpolation suggests $\alpha\approx0.02$ (D).\\
+11 & $\taum(K_{u1})=\tau_0/(1-K_{u1}/K_c)$, from a linearised macrospin model. & D & Matches $\alpha=0.1$ (48 vs 50--70 ps); undershoots $\alpha=0.01$ by about $2.5\times$. Untested against any $K_{u1}$ data.\\
+12 & Drexel's DATSQN code is Atari deep Q-learning, not classification, so its numbers are not comparable to MNIST accuracy. & C & Training scripts.\\
+\bottomrule
+\end{longtable}
+
+\section{Hypotheses, predictions and kill criteria}\label{sec:hyp}
+Notation: $\beta=e^{-\Delta t/\taum}$ with $\Delta t=100$ ps; $\theta_+,\theta_-$ are the positive and negative firing thresholds on $m_z$; accuracy means test accuracy at the final epoch (\S\ref{sec:analysis}). $\ptn$ is the smallest accuracy difference we would call practically meaningful: provisionally $\ptn=0.20$ percentage points, to be re-examined once at gate G3 and then fixed.
+
+\begin{description}[leftmargin=0pt,labelsep=6pt]
+\item[H1 (algorithmic effect).] With thresholds, gain and the learning-rate rule held fixed, accuracy depends on $\taum\in[50,1200]$ ps. \emph{Null:} all $\taum$ arms have equal mean accuracy.\\
+\textit{Prediction (recorded):} monotone non-decreasing with a knee between 200 and 800 ps.\\
+\textit{Kill:} omnibus test not significant \emph{and} the 95\% CI of the largest pairwise contrast lies inside $\pm\ptn$. If the CI straddles $\ptn$, the result is \emph{inconclusive}, not ``no effect''.
+\item[H2 (shape).] Among a fixed set of curve families (constant, linear in $\log\taum$, saturating, quadratic) fitted to arm means, the saturating family wins by leave-one-seed-out error. \emph{Kill:} constant wins (consistent with no effect) or the quadratic wins with a downward step $>\ptn$ beyond the peak.
+\item[H3 (confound separation).] The $\taum$ effect survives when $\theta_+$ is re-tuned per $\taum$. \emph{Kill:} accuracy range across $\taum$ at tuned $\theta_+$ is $\le\ptn$ while the untuned range exceeds $\ptn$. Then the apparent $\taum$ effect was a threshold effect.
+\item[H4 (anisotropy path; exploratory).] Under the \emph{assumed} map $K_{u1}\mapsto(\taum,\theta_+,\text{gain})$ from Joy's Fig.~5--6 and the formula of row 11, accuracy rises and saturates, and a path that moves only $\theta_+$ and gain (with $\taum$ fixed at 503.8 ps) does \emph{not} reproduce it. \emph{Kill:} the threshold-only path reproduces the accuracy change to within $\ptn$. Reported only with the label ``assumed mapping''.
+\item[H5 (ternary matters).] A functionally ternary network beats an otherwise identical binary one. \emph{Kill:} the 95\% CI of the difference is inside $\pm\ptn$, or the mean fraction of negative spikes in hidden layers is $<1\%$ (then the network is effectively binary, whatever it is called).
+\end{description}
+
+\section{Priors, written before data}\label{sec:priors}
+These are the drafter's (the AI assistant's) subjective probabilities, recorded so they can be scored afterwards. \textbf{Before reading this section, the student writes his own in Appendix~B.} Reading the drafter's first anchors him.
+
+\begin{center}\small
+\begin{tabularx}{0.92\textwidth}{@{}Xr@{}}
+\toprule Statement & Prior\\ \midrule
+MNIST: accuracy range across the 7 core $\taum$ arms is $\ge\ptn$ (0.2 pp) & 0.50\\
+MNIST: range $\ge1$ pp & 0.15\\
+SHD: range $\ge2$ pp & 0.65\\
+Given an effect: saturating / interior optimum / other & 0.50 / 0.35 / 0.15\\
+MNIST: $\taum$ effect survives re-tuning $\theta_+$ (H3) & 0.40\\
+Replication gate G0 passes (best-test-epoch protocol within $\pm0.3$ pp of 95.89\%) & 0.60\\
+Committed code (\code{NEG_THRESHOLD}=1.6) emits no negative spikes & 0.95\\
+\bottomrule\end{tabularx}
+\end{center}
+Expected size, for the record: on static MNIST the drafter expects a small effect (a few tenths of a point), and a larger one on SHD where input has real temporal structure.
+
+\section{Model}
+\textbf{Reference model} (Appendix~A): the spiking MLP of row 1--2 of the evidence register, with the repo's MTJ neuron update rule unchanged. \textbf{The complete list of modifications:}
+\begin{enumerate}
+\item \code{NEG_THRESHOLD} becomes an explicit parameter, set to the values in \S\ref{sec:arms}.
+\item \code{TAU_LEAK_PS} becomes a command-line parameter ($\taum$ in ps, $\Delta t$ fixed at 100 ps).
+\item A fixed validation split (\S\ref{sec:data}).
+\item Evaluation at the final epoch only, with every run appended to a ledger (\S\ref{sec:log}).
+\item Seeding and determinism flags (\S\ref{sec:train}).
+\item Logging of per-layer spike rate, negative-spike fraction and output spike count.
+\end{enumerate}
+Nothing else changes. \textbf{Caveat:} in the repo, ``$\taum$'' is a geometric leak applied in a transformed variable (from the code audit), not Joy's nonlinear relaxation. Robustness arm R1 (\S\ref{sec:arms}) replaces it with a leak digitised from Fig.~3--4 to check the conclusions do not depend on this choice.
+
+\section{Datasets and splits}\label{sec:data}
+\begin{itemize}
+\item \textbf{D1 MNIST (primary).} 60\,000 train split into 50\,000 train / 10\,000 validation with one fixed stratified split (split seed 0, identical for all runs). The 10\,000 test images are not used until the confirmatory run. Direct constant-current encoding as in the repo; no augmentation.
+\item \textbf{D2 SHD (secondary).} 8\,156 train / 2\,264 test, no official validation split. Validation is a \emph{speaker-held-out} subset of train (grouped by speaker ID), so validation measures generalisation to new voices like the test set. Input binning and $T$ are fixed in Appendix~A before freeze and identical across arms. Network: $700\to128\to64\to20$ with the same neuron. $\taum$ is in units of steps here; the ``ps'' labels are not physical.
+\item \textbf{D3 negative controls.} (a) MNIST with shuffled training labels: expect $\approx10\%$ for every arm. (b) SHD with \emph{temporal shuffle} (permute time bins within each sample): this keeps per-channel spike counts but destroys order. If $\taum$ acts through temporal integration, its effect on SHD should shrink under temporal shuffle. If it does not shrink, $\taum$ is not acting the way we claim.
+\end{itemize}
+
+\section{Training scheme}\label{sec:train}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}X@{}}
+\toprule Item & Specification\\ \midrule
+Optimiser, loss & Adam; cross-entropy on summed output spikes; grad-clip 1.0; surrogate slope 5.0 (repo values).\\
+Epochs & 10 (fixed budget). No early stopping. Convergence control T-conv: reference and two extreme arms also run to 30 epochs to see whether the arm ordering at 10 epochs persists.\\
+Learning rate & Chosen \emph{per arm} from $\{3\times10^{-4},10^{-3},3\times10^{-3}\}$ by mean final-epoch \emph{validation} accuracy on 2 tuning seeds, disjoint from all confirmatory seeds. Reason: the repo's settings were tuned near $\taum=503.8$ ps, which would favour that arm.\\
+Batch size & 64; default PyTorch initialisation.\\
+Seeds & Exploration (Phase A): seeds 0--4. Confirmatory (Phase B): $n=12$ seeds drawn with a CSPRNG at freeze time, never used in Phase A or tuning. Provisional; $n$ is recomputed at G3 (\S\ref{sec:gates}).\\
+Pairing & The same seed gives the same initial weights and data order in every arm (separate generators for init and shuffling), so arms are compared within seed.\\
+Determinism & Deterministic flags on; GPU nondeterminism that remains is treated as noise, and hardware and library versions are logged.\\
+Selection & Validation is used for monitoring and tuning only. Test accuracy is computed \emph{once per run, at the final epoch}, after the arm is frozen.\\
+\bottomrule\end{tabularx}
+\end{center}
+
+\section{Experimental arms}\label{sec:arms}
+\textbf{Core $\taum$ arms (7)} at $(\theta_+,\theta_-)=(0.80,0.90)$, the README setting:
+\begin{center}\small
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule $\taum$ (ps) & 50 & 100 & 200 & 350 & \textbf{503.8} & 800 & 1200\\
+$\beta$ & 0.135 & 0.368 & 0.607 & 0.752 & 0.820 & 0.883 & 0.920\\ \bottomrule
+\end{tabular}
+\end{center}
+503.8 ps is the reference arm. The range comes from Joy's Fig.~4a damping sweep.
+
+\textbf{Limit arms (2, reported separately, excluded from the omnibus):} $\beta=0$ (no memory) and $\beta=1$ (no leak).
+
+\textbf{Threshold factorial (H3):} $\theta_+\in\{0.6,0.7,0.8\}$ with $\theta_-=\theta_++0.1$, crossed with the 7 core $\taum$ values. The $\theta_+=0.8$ row is the core set.
+
+\textbf{Binary reference (H5):} $\theta_-=1.6$ (the committed value; unreachable) at $\taum\in\{200,503.8,1200\}$ ps, checked to emit zero negative spikes. \textbf{As-committed arm:} the repo exactly as shipped, for the replication gate.
+
+\textbf{R1 robustness:} a device-faithful nonlinear leak digitised from Joy's Fig.~3--4 at three effective time scales, to test whether H1's sign and significance survive.
+
+\textbf{Run count (provisional).} Core $7\times12=84$; limits $2\times12=24$; threshold factorial $14\times12=168$; binary $3\times12=36$; total confirmatory MNIST $\approx312$. Tuning $21\times3\times2=126$. Exploration $\approx35$. Time per run is unknown and measured at G3.
+
+\section{Blinding and independence}\label{sec:blind}
+\textbf{Honest limit.} The designer cannot be blind to the design, and a single student who launches the jobs cannot be blind to the arms. What can be blinded is the \emph{analysis} and the \emph{interpretation}. This is a partial double-blind and is described as such.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{2.5cm}X@{}}
+\toprule Role & Duty and what it may see\\ \midrule
+Designer & Writes this protocol and the analysis code; freezes both before Phase B.\\
+Runner & Executes Phase B jobs and writes results tagged with arm \emph{codes} only.\\
+Key-holder & Holds the sealed arm key; reveals it only at unblinding. A second person where possible (the student, or Joy).\\
+Analyst & An independent reader with no project context (a fresh AI instance, or Joy). Runs the committed analysis on coded data.\\
+Auditor & Tries to break the protocol and re-run from the ledger.\\
+\bottomrule\end{tabularx}
+\end{center}
+
+\textbf{Mechanism.}
+\begin{enumerate}
+\item At freeze, each arm $(\taum,\theta,\dots)$ is given a random 4-character code by a CSPRNG. The key is stored encrypted, and its SHA-256 hash goes in the freeze commit.
+\item Result files carry only the codes. The analysis script sees codes and metrics, never $\taum$ or $\theta$.
+\item \textbf{Axis direction is hidden too.} Arms are ordered along an unnamed axis $x_1,\dots,x_7$, and the direction is flipped by a coin flip stored in the key. The analyst reports the shape \emph{in $x$}. Only after unblinding do we check whether the direction matches the pre-registered prediction (rising with $\taum$). This blinds the shape test, which needs ordering.
+\item Unblinding happens only after (i) the full analysis output is committed and hashed and (ii) the interpretation rules of \S\ref{sec:hyp} are unchanged.
+\item Two-person rule: any deviation from this protocol after freeze needs a second signature.
+\end{enumerate}
+
+\section{Confirmatory analysis plan}\label{sec:analysis}
+\textbf{Primary endpoint:} test accuracy (\%) at epoch 10 for each (arm, seed). Runs that diverge (NaN) count as failures, are reported by arm, and are not rerun. A rerun is allowed only for a non-statistical crash, and is logged.
+
+\begin{enumerate}
+\item \textbf{H1 omnibus.} Seed-blocked permutation $F$-test of the arm effect over the 7 core arms (permute arm labels within seed, 20\,000 permutations), $\alpha=0.05$.
+\item \textbf{Effect size.} Range of arm means, and the largest pairwise paired difference with a 95\% bootstrap CI that resamples seeds and recomputes the max contrast each time (so the CI accounts for picking the largest).
+\item \textbf{Pairwise vs reference.} Six paired contrasts against 503.8 ps, Holm-adjusted.
+\item \textbf{Equivalence.} ``No practical effect'' is claimed only if the CI upper bound of the max contrast is $<\ptn$.
+\item \textbf{H2 shape.} Leave-one-seed-out CV over the four curve families on arm means against $\log\taum$ (or $x$ while blinded).
+\item \textbf{H3.} Mixed model $\text{acc}\sim\taum\times\theta_++(1|\text{seed})$; test the interaction. Then the tuned-$\theta_+$ contrast of \S\ref{sec:hyp}.
+\item \textbf{Multiplicity.} Families: (F1) H1 omnibus and pairwise; (F2) H3; (F3) H5. SHD is its own family with the same analysis.
+\item \textbf{Mechanism checks (exploratory, labelled as such).} Per-layer firing rates, negative-spike fraction, summed-output-spike scale, validation--test gap, accuracy vs $\taum$ at matched firing rate.
+\end{enumerate}
+\textbf{Pre-specified figures:} accuracy vs $\log\taum$ with 95\% CI \emph{and} every seed as a thin line; spike rate vs $\taum$; val vs test accuracy; the K-path plot (H4) with the mapping label on the figure itself.
+
+\section{The break-it table}\label{sec:break}
+Each positive claim is attacked by pushing its knob to an extreme, pricing it in several currencies, and testing for a cheaper explanation. Currencies: statistical (seeds), physical (fabrication precision), energy, time.
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{1.6cm}L{3.0cm}XL{3.3cm}@{}}
+\toprule Claim & Extreme (reductio) test & Cost and cheaper explanation & Kill criterion\\ \midrule
+C1: $\taum$ controls accuracy & $\beta\to0$ and $\beta\to1$ & Cost: $n\approx9$ seeds per arm to detect 0.2 pp at 80\% power (assumes seed SD 0.15 pp, no pairing gain); $\approx14$ with Holm over 6 contrasts. Cheaper rival: re-tune $\theta_+$ and lr only. & H1 kill rule (\S\ref{sec:hyp}).\\
+C2: anisotropy raises accuracy via $\taum$ & $K\to K_c$: $\taum\to\infty$ and ternary is lost (Fig.~5) & A curve that keeps rising to $K_c$ is not physical, so it must saturate or break. Fabrication cost (assumes row 11): $d\taum/\taum=(dK/K_c)/(1-K/K_c)$: a 1\% error in $K$ gives 2\% in $\taum$ at $K/K_c=0.5$, 10\% at 0.9, 20\% at 0.95. & Threshold-only path matches within $\ptn$ (H4).\\
+C3: ternary beats binary & $\theta_-\to$ unreachable & Cost: bipolar drive and extra circuitry. If negative spikes are $<1\%$ the network is functionally binary. & CI inside $\pm\ptn$ (H5).\\
+C4: the optimum near the wall is useful & operate at $K/K_c\ge0.9$ & Cost: tolerance above. & Accuracy within $\ptn$ of the optimum at $K/K_c\le0.5$.\\
+C5: heterogeneous / hierarchical $\taum$ helps (Stage 2) & spread $\to0$; spread so large some neurons are memoryless & Cost: per-neuron device tolerance needed. Rival: same mean $\taum$ and parameter count, homogeneous. & Gain $\le\ptn$ at equal mean $\taum$.\\
+C6: an exponential $\taum$ is adequate for the device & swap in the digitised nonlinear leak (R1) & Cost: more complex neuron model. & H1 changes sign or significance under R1.\\
+C7: the effect is $\taum$ and not output-spike scale (readout is a spike sum) & match firing rate across arms & Cost: a normalised readout. & Effect vanishes at matched rate.\\
+\bottomrule\end{tabularx}
+\end{center}
+
+\section{Threats to validity}
+{\footnotesize
+\begin{longtable}{@{}p{0.8cm}L{4.4cm}L{6.0cm}L{3.0cm}@{}}
+\toprule ID & Threat & Mitigation & Residual\\ \midrule\endhead
+T1 & Best-epoch-on-test selection inflates the baseline (evidence row 3) & Final epoch only; validation for selection & Replication gate compares both ways\\
+T2 & Hyperparameters tuned near 503.8 ps favour that arm & Per-arm lr tuning on validation & Tuning budget is small\\
+T3 & Fixed window $T=25$ (2.5 ns) is not long compared with $\taum\le1.2$ ns, so saturation could be a window artefact & Vary $T$ as a control & Cost: extra runs\\
+T4 & Constant-current encoding differs from spike-timing inputs & SHD as a second dataset & Two datasets only\\
+T5 & Surrogate-gradient slope interacts with $\taum$ & Report one extra slope on the reference and extremes & Not a full sweep\\
+T6 & Negative-threshold bug & Fixed and verified by negative-spike fraction (G4) & README vs code conflict stays unresolved until Joy answers\\
+T7 & Exponential leak vs nonlinear device relaxation & Robustness arm R1 & Digitising error from figures\\
+T8 & Readout is a spike-count sum, so $\taum$ rescales the logits & Matched-rate analysis (C7) & Exploratory\\
+T9 & Analyst knows the hoped-for shape & Blind axis direction, coded arms, mechanical rules (\S\ref{sec:blind}) & Designer still knows\\
+T10 & Forking paths (many knobs) & Pre-registered families, Holm, exploration/confirmation split & Exploratory findings stay exploratory\\
+T11 & Speaker leakage in SHD validation & Speaker-held-out split & Few speakers\\
+T12 & Design shaped by a curve seen only as a sketch & Priors written first; blinding; test of mechanism (temporal shuffle) & Real curve may differ\\
+T13 & AI drafting bias toward agreement & Numeric kill rules, independent analyst and auditor & Cannot be removed, only checked\\
+\bottomrule\end{longtable}}
+
+\section{Gates and stopping rules}\label{sec:gates}
+\begin{description}[leftmargin=0pt,labelsep=6pt]
+\item[G0 Replication.] Run the original code, both the \code{NEG_THRESHOLD}=1.6 build and the 0.90 build, on 5 seeds with the authors' best-test-epoch protocol. Pass if either reproduces 95.89\% within $\pm0.3$ pp. If neither does, stop and find out why, and \emph{do not} proceed to the sweep.
+\item[G1 Neuron unit test.] Step response of the neuron matches the analytic $\beta^t$ to numerical precision; the simulated leak is overlaid on Joy's Fig.~4 curves.
+\item[G2 Negative controls.] Shuffled labels give $10\pm1$\% on every arm; $\beta=0$ behaves as memoryless.
+\item[G3 Noise and cost.] Measure seed SD on the reference arm (10 seeds) and the time per run. Then fix $\ptn$ and $n$ ($n=\lceil 2\sigma^2(z_{1-\alpha/2k}+z_{0.8})^2/\ptn^2\rceil$, rounded up to even). If the budget cannot reach this $n$, shrink the grid, not $n$.
+\item[G4 Ternary validity.] After the bug fix, mean negative-spike fraction in hidden layers is at least 1\%. Otherwise all ``ternary'' results are labelled ``effectively binary''.
+\item[G5 Independent review.] Auditor signs off, or lists open objections that are then answered in writing.
+\item[G6 Freeze.] Code, grid, seeds, key hash and analysis script are committed (Appendix~D) before Phase B starts.
+\end{description}
+
+\section{Stage 2 (outline only)}\label{sec:stage2}
+To be pre-registered by a separate addendum once Stage 1 is analysed: (a) per-neuron $\taum$, fixed random vs learned, at equal mean; (b) layer-wise $\taum$, short$\to$long vs long$\to$short; (c) a per-layer $\taum$ treated as a run-time knob, the software analogue of electric-field reconfiguration; (d) device-level $K_{u1}\to\taum$ data from Joy's relaxation curves or from our own simulations. Each carries the same break-it and blinding rules.
+
+\section{Logging, deviations and amendments}\label{sec:log}
+\begin{itemize}
+\item \textbf{Ledger:} every run (including failures) appends config hash, seed, code commit, hardware, per-epoch validation, final test, spike statistics and outcome. Nothing is deleted.
+\item \textbf{Deviations:} any departure from this protocol is written down with date, reason and the second signature, and affected results are flagged in every figure caption.
+\item \textbf{Amendments} are allowed only before Phase B begins; afterwards, only as logged deviations.
+\item \textbf{Surprises log:} anything unexpected is recorded when seen, not after.
+\end{itemize}
+
+\section{Phases and sign-off}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.0cm}X@{}}
+\toprule Phase & Content\\ \midrule
+0 & Gates G0--G4 on the repo; student's priors in Appendix~B.\\
+A (exploration) & Validation data only; seeds 0--4; anything may be looked at, and everything is labelled exploratory.\\
+Freeze (G5, G6) & Review, key generation, commit.\\
+B (confirmatory) & Frozen code, fresh seeds, test accuracy computed once per run.\\
+Unblind & Analysis committed and hashed first, then the key is revealed.\\
+Report & All arms and seeds, including null and failed runs, plus priors scored against outcomes.\\
+\bottomrule\end{tabularx}
+\end{center}
+
+\vspace{4pt}
+\begin{tabularx}{\textwidth}{@{}XXXX@{}}
+Designer: \rule{3cm}{0.4pt} & Key-holder: \rule{3cm}{0.4pt} & Auditor: \rule{3cm}{0.4pt} & Date: \rule{2.5cm}{0.4pt}
+\end{tabularx}
+
+\appendix
+\section{Code facts (from the audit; line numbers approximate)}
+\begin{itemize}\raggedright\sloppy
+\item \code{thmtj.py}: \code{BATCH_SIZE}=64, \code{LEARNING_RATE}=1e-3, \code{NUM_EPOCHS}=10, \code{NUM_STEPS}=25 (46--49); \code{THRESHOLD}=0.8 (52); \code{NEG_THRESHOLD}=1.6 (55); \code{PULSE_WIDTH_PS}=30, \code{DT_PS}=100, \code{TAU_LEAK_PS}=503.8 (58--64); \code{J_MIN}=1e11, \code{J_MAX}=1e12; \code{PULSE_SURROGATE_ALPHA}=5; \code{GRAD_CLIP}=1.
+\item Ternary spike function (137--180); \code{HardMTJNeuron} (230 ff.); amplitude table $A(J)$ (${\sim}262$--$318$); rise time $\tau_r(J)=386.98\,(J/10^{11})^{-1.223}+8.88$ ps (${\sim}360$--$383$); leak (${\sim}480$--$510$): geometric in a transformed variable with factor 0.82 per step.
+\item Forward pass: $x$ enters \code{fc1} at every step; three \code{HardMTJNeuron} layers; readout \code{spk3.sum(dim=0)}; loss \code{CrossEntropyLoss}.
+\item Training loop: best-test-epoch checkpoint (\code{if test_stats["accuracy"] > best_accuracy}) reloaded for the final test.
+\item To be filled before freeze: SHD binning, $T$, loader; exact library versions; hardware.
+\end{itemize}
+
+\section{Student's own priors (fill in \emph{before} reading \S\ref{sec:priors})}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}Xp{3cm}@{}}
+\toprule Statement & Your probability\\ \midrule
+MNIST range across core $\taum$ arms $\ge0.2$ pp & \\
+MNIST range $\ge1$ pp & \\
+SHD range $\ge2$ pp & \\
+Shape given an effect: saturating / interior optimum / other & \\
+Effect survives re-tuning $\theta_+$ & \\
+Replication gate G0 passes & \\
+What result would surprise you most? & \\
+\bottomrule\end{tabularx}
+\end{center}
+
+\section{Open questions that block freezing}
+\begin{enumerate}
+\item Which $\alpha$, and which build (\code{NEG_THRESHOLD} 1.6 or 0.90), produced the repo's numbers?
+\item Joy's accuracy-vs-anisotropy data: dataset, network, seeds, and the full curve, not a sketch.
+\item Relaxation curves ($m_z$ decay) at several $K_{u1}$ values, to replace row 11.
+\item The end of the advisor's task 3.
+\end{enumerate}
+
+\section{Freeze checklist}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{5cm}X@{}}
+\toprule Item & Value\\ \midrule
+Code commit hash & \\
+Analysis script hash & \\
+Arm key SHA-256 & \\
+Confirmatory seeds & \\
+$\ptn$ and $n$ (from G3) & \\
+Gates G0--G5 passed (dates) & \\
+Freeze date and signatures & \\
+\bottomrule\end{tabularx}
+\end{center}
+\end{document}
