@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\snn\ternary-snn-taum-study\runner\run.py", line 22, in <module>
+    import torch
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\__init__.py", line 2764, in <module>
+    import torch.nn.intrinsic
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\nn\intrinsic\__init__.py", line 19, in <module>
+    from torch.nn.intrinsic import modules, qat, quantized
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\nn\intrinsic\quantized\__init__.py", line 3, in <module>
+    from torch.nn.intrinsic.quantized import dynamic, modules
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\nn\intrinsic\quantized\dynamic\__init__.py", line 1, in <module>
+    from torch.nn.intrinsic.quantized.dynamic.modules import *  # noqa: F403
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\nn\intrinsic\quantized\dynamic\modules\__init__.py", line 1, in <module>
+    from torch.nn.intrinsic.quantized.dynamic.modules.linear_relu import LinearReLU
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\nn\intrinsic\quantized\dynamic\modules\linear_relu.py", line 1, in <module>
+    from torch.ao.nn.intrinsic.quantized.dynamic import LinearReLU
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\ao\nn\intrinsic\quantized\dynamic\__init__.py", line 1, in <module>
+    from .modules import *  # noqa: F403
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\ao\nn\intrinsic\quantized\dynamic\modules\__init__.py", line 1, in <module>
+    from .linear_relu import LinearReLU
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\ao\nn\intrinsic\quantized\dynamic\modules\linear_relu.py", line 6, in <module>
+    import torch.ao.nn.quantized.dynamic as nnqd
+  File "C:\snn\ternary-snn-taum-study\.venv\Lib\site-packages\torch\ao\nn\quantized\dynamic\__init__.py", line 1, in <module>
+    from .modules import *  # noqa: F403
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1357, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 418, in __enter__
+  File "<frozen importlib._bootstrap>", line 311, in acquire
+  File "<frozen importlib._bootstrap>", line 170, in __enter__
+  File "<frozen importlib._bootstrap>", line 132, in setdefault
+  File "<frozen importlib._bootstrap>", line 74, in __new__
+KeyboardInterrupt

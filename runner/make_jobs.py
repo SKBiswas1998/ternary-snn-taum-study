@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Generate job CSVs. Reserved seed ranges (never reuse across purposes):
    explore 0-4 | G0 0-4 | G3 100-109 | tune 200-201 | confirm: CSPRNG draw at freeze (not here).
-Usage: python runner/make_jobs.py g0|g2|g3|explore
+Usage: python runner/make_jobs.py g0|g2|g3|explore|ext
 """
 import csv
 import sys
@@ -33,6 +33,8 @@ elif what == "g2":    # negative control: shuffled train labels, 3 tau arms x 2 
     write("g2", [row("G2", f"shuf_tau{t}", s, tau=t, sh=1) for t in (50, 503.8, 1200) for s in range(2)])
 elif what == "g3":    # seed noise on the reference arm
     write("g3", [row("G3", "ref", s) for s in range(100, 110)])
+elif what == "ext":   # v0.2 extension arms (H6 window test): tau beyond the 2.5 ns window, README build
+    write("ext", [row("explore", f"tau{t}", s, tau=t) for t in (2000, 3000, 5000) for s in range(5)])
 elif what == "explore":
     write("explore", [row("explore", f"tau{t}", s, tau=t) for t in TAUS for s in range(5)])
 else:

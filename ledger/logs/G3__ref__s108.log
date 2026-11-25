@@ -1,0 +1,12 @@
+Using device: cpu
+[G3__ref__s108__lr0.001__e10] ep 1/10 loss 0.9174 train 80.80% val 87.11%  (247s)
+[G3__ref__s108__lr0.001__e10] ep 2/10 loss 0.5466 train 89.50% val 91.44%  (504s)
+[G3__ref__s108__lr0.001__e10] ep 3/10 loss 0.4671 train 91.77% val 93.36%  (756s)
+[G3__ref__s108__lr0.001__e10] ep 4/10 loss 0.4130 train 92.84% val 93.17%  (1016s)
+[G3__ref__s108__lr0.001__e10] ep 5/10 loss 0.3683 train 93.84% val 93.65%  (1272s)
+[G3__ref__s108__lr0.001__e10] ep 6/10 loss 0.3422 train 94.55% val 93.50%  (1523s)
+[G3__ref__s108__lr0.001__e10] ep 7/10 loss 0.3209 train 94.85% val 94.12%  (1780s)
+[G3__ref__s108__lr0.001__e10] ep 8/10 loss 0.2924 train 95.15% val 94.50%  (2023s)
+[G3__ref__s108__lr0.001__e10] ep 9/10 loss 0.2680 train 95.67% val 95.19%  (2290s)
+[G3__ref__s108__lr0.001__e10] ep 10/10 loss 0.2718 train 95.92% val 95.13%  (2529s)
+[done] G3__ref__s108__lr0.001__e10 status=ok final_val=95.13 wall=2535s
