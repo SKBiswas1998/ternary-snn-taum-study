@@ -53,3 +53,16 @@ Traceback (most recent call last):
   File "C:\snn\ternary-snn-taum-study\upstream\mtj\ternary_mtj\thmtj.py[sliced]", line 506, in forward
   File "C:\snn\ternary-snn-taum-study\upstream\mtj\ternary_mtj\thmtj.py[sliced]", line 173, in hard_pulse_ste
 KeyboardInterrupt
+Using device: cpu
+[explore__tau50__s0__lr0.001__e10] ep 1/10 loss 1.7624 train 58.65% val 70.29%  (227s)
+[explore__tau50__s0__lr0.001__e10] ep 2/10 loss 1.2022 train 71.48% val 72.22%  (455s)
+[explore__tau50__s0__lr0.001__e10] ep 3/10 loss 1.0541 train 75.37% val 80.46%  (688s)
+[explore__tau50__s0__lr0.001__e10] ep 4/10 loss 1.1275 train 73.62% val 73.54%  (908s)
+[explore__tau50__s0__lr0.001__e10] ep 5/10 loss 1.1774 train 74.32% val 75.00%  (1124s)
+[explore__tau50__s0__lr0.001__e10] ep 6/10 loss 1.0314 train 76.19% val 79.79%  (1337s)
+[explore__tau50__s0__lr0.001__e10] ep 7/10 loss 0.8992 train 79.28% val 76.93%  (1551s)
+[explore__tau50__s0__lr0.001__e10] ep 8/10 loss 0.8523 train 80.89% val 78.65%  (1769s)
+[explore__tau50__s0__lr0.001__e10] ep 9/10 loss 0.8591 train 80.62% val 77.65%  (1980s)
+[explore__tau50__s0__lr0.001__e10] ep 10/10 loss 0.8972 train 81.24% val 81.00%  (2210s)
+[done] explore__tau50__s0__lr0.001__e10 status=ok final_val=81.0 wall=2217s
+[skip] explore__tau50__s0__lr0.001__e10 (already done)

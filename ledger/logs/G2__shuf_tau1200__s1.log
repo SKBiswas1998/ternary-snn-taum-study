@@ -1,0 +1,13 @@
+Using device: cpu
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 1/10 loss 2.4195 train 10.11% val 9.19%  (220s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 2/10 loss 2.3314 train 10.03% val 12.53%  (442s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 3/10 loss 2.3467 train 10.26% val 9.79%  (665s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 4/10 loss 2.3205 train 10.02% val 8.92%  (883s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 5/10 loss 2.3242 train 10.07% val 9.82%  (1107s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 6/10 loss 2.3254 train 10.15% val 9.85%  (1323s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 7/10 loss 2.3195 train 10.15% val 10.09%  (1544s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 8/10 loss 2.3267 train 10.18% val 10.72%  (1765s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 9/10 loss 2.3345 train 10.22% val 9.89%  (1985s)
+[G2__shuf_tau1200__s1__lr0.001__e10] ep 10/10 loss 2.3342 train 10.21% val 11.54%  (2200s)
+[done] G2__shuf_tau1200__s1__lr0.001__e10 status=ok final_val=11.54 wall=2204s
+[skip] G2__shuf_tau1200__s1__lr0.001__e10 (already done)

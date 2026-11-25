@@ -31,3 +31,16 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap>", line 132, in setdefault
   File "<frozen importlib._bootstrap>", line 74, in __new__
 KeyboardInterrupt
+Using device: cpu
+[explore__tau100__s0__lr0.001__e10] ep 1/10 loss 1.1808 train 72.96% val 79.16%  (228s)
+[explore__tau100__s0__lr0.001__e10] ep 2/10 loss 0.8494 train 82.46% val 78.49%  (454s)
+[explore__tau100__s0__lr0.001__e10] ep 3/10 loss 0.7651 train 85.04% val 85.67%  (698s)
+[explore__tau100__s0__lr0.001__e10] ep 4/10 loss 0.6550 train 87.68% val 87.06%  (925s)
+[explore__tau100__s0__lr0.001__e10] ep 5/10 loss 0.5932 train 89.70% val 89.27%  (1157s)
+[explore__tau100__s0__lr0.001__e10] ep 6/10 loss 0.5313 train 91.25% val 90.36%  (1389s)
+[explore__tau100__s0__lr0.001__e10] ep 7/10 loss 0.4922 train 91.69% val 93.40%  (1622s)
+[explore__tau100__s0__lr0.001__e10] ep 8/10 loss 0.4305 train 92.64% val 91.63%  (1852s)
+[explore__tau100__s0__lr0.001__e10] ep 9/10 loss 0.3962 train 93.24% val 91.27%  (2070s)
+[explore__tau100__s0__lr0.001__e10] ep 10/10 loss 0.4087 train 93.35% val 93.11%  (2298s)
+[done] explore__tau100__s0__lr0.001__e10 status=ok final_val=93.11 wall=2306s
+[skip] explore__tau100__s0__lr0.001__e10 (already done)

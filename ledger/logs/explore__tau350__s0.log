@@ -1,0 +1,13 @@
+Using device: cpu
+[explore__tau350__s0__lr0.001__e10] ep 1/10 loss 0.8575 train 80.46% val 88.92%  (230s)
+[explore__tau350__s0__lr0.001__e10] ep 2/10 loss 0.5290 train 89.80% val 88.66%  (454s)
+[explore__tau350__s0__lr0.001__e10] ep 3/10 loss 0.4548 train 92.14% val 92.37%  (676s)
+[explore__tau350__s0__lr0.001__e10] ep 4/10 loss 0.3994 train 92.90% val 93.54%  (899s)
+[explore__tau350__s0__lr0.001__e10] ep 5/10 loss 0.3637 train 93.79% val 91.90%  (1126s)
+[explore__tau350__s0__lr0.001__e10] ep 6/10 loss 0.3437 train 94.34% val 93.75%  (1354s)
+[explore__tau350__s0__lr0.001__e10] ep 7/10 loss 0.2910 train 94.88% val 94.61%  (1581s)
+[explore__tau350__s0__lr0.001__e10] ep 8/10 loss 0.2892 train 95.11% val 94.83%  (1803s)
+[explore__tau350__s0__lr0.001__e10] ep 9/10 loss 0.2884 train 95.51% val 94.80%  (2030s)
+[explore__tau350__s0__lr0.001__e10] ep 10/10 loss 0.2617 train 95.83% val 95.14%  (2262s)
+[done] explore__tau350__s0__lr0.001__e10 status=ok final_val=95.14 wall=2268s
+[skip] explore__tau350__s0__lr0.001__e10 (already done)

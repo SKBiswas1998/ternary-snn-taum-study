@@ -76,3 +76,16 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 1118, in get_code
   File "<frozen importlib._bootstrap_external>", line 1217, in get_data
 KeyboardInterrupt
+Using device: cpu
+[explore__tau50__s3__lr0.001__e10] ep 1/10 loss 1.8357 train 53.95% val 62.85%  (232s)
+[explore__tau50__s3__lr0.001__e10] ep 2/10 loss 1.6083 train 62.63% val 62.32%  (457s)
+[explore__tau50__s3__lr0.001__e10] ep 3/10 loss 1.3813 train 67.50% val 67.52%  (698s)
+[explore__tau50__s3__lr0.001__e10] ep 4/10 loss 1.0983 train 74.05% val 72.82%  (919s)
+[explore__tau50__s3__lr0.001__e10] ep 5/10 loss 1.0502 train 78.60% val 76.08%  (1156s)
+[explore__tau50__s3__lr0.001__e10] ep 6/10 loss 1.0137 train 80.03% val 74.39%  (1390s)
+[explore__tau50__s3__lr0.001__e10] ep 7/10 loss 1.0494 train 78.60% val 80.46%  (1619s)
+[explore__tau50__s3__lr0.001__e10] ep 8/10 loss 0.9826 train 79.92% val 75.79%  (1855s)
+[explore__tau50__s3__lr0.001__e10] ep 9/10 loss 0.9449 train 80.36% val 85.53%  (2085s)
+[explore__tau50__s3__lr0.001__e10] ep 10/10 loss 0.8867 train 82.82% val 79.92%  (2317s)
+[done] explore__tau50__s3__lr0.001__e10 status=ok final_val=79.92 wall=2324s
+[skip] explore__tau50__s3__lr0.001__e10 (already done)

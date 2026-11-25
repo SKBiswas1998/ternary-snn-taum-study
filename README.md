@@ -4,9 +4,10 @@ Does the membrane time constant **tau_m** change the accuracy of the ternary MTJ
 (Drexel group, `ternary_mtj/thmtj.py`), and why does accuracy rise and then saturate as the magnetic
 anisotropy of the device grows? The design is pre-registered: read **`protocol/protocol.pdf`** first.
 
-> **Status (24 Nov 2026, evening).** Protocol **v0.2 is a draft, not frozen**. No confirmatory run has been made.
-> Gates G0 (replication), G1 (neuron unit test) and G3 (seed noise) are done; the exploratory tau_m sweep is
-> running and has **not been analysed yet**. Nothing here is a result about tau_m so far.
+> **Status (25 Nov 2026, afternoon).** Protocol **v0.2 is a draft, not frozen**. No confirmatory run has been made.
+> Gates G0, G1, G2 and G3 are done and the exploratory tau_m sweep (tau_m 50 ps to 5 ns, 56 runs in all) has
+> finished. The sweep is **exploratory**: validation accuracy only, one learning rate, fixed thresholds, 10 epochs,
+> 5 seeds per arm. It points to a hypothesis; it does not confirm one.
 
 ## What we know so far
 
@@ -16,6 +17,9 @@ anisotropy of the device grows? The design is pre-registered: read **`protocol/p
 | **G0, committed code** (negative threshold 1.6, 5 seeds) | 65 % final / 68 % best-epoch test; only 1 of 5 seeds learned; 0 % negative spikes. The committed code does not reproduce the README; the README build does. |
 | **G1 neuron unit test** | `leak()` and `integrate()` match Joy's closed forms to machine precision. tau_r(J) within 1-3 % of her fits; free-decay tau at alpha = 0.01 fits 523 ps (repo uses 503.8 ps; error in m_z at most 0.019). alpha x tau_leak = 5.0-5.7 ps. |
 | **G3 seed noise** (README build, tau_m = 503.8 ps, seeds 100-109) | validation 95.20 +- 0.22 %, range 94.72-95.46 %, no failed seeds. Pooled with G0 (15 runs): sd about 0.31 pp. With 5 seeds per arm only differences of about 0.4 pp or more will stand out. |
+| **G2 shuffled-label control** (tau_m 50, 503.8, 1200 ps, 2 seeds each) | validation 9.15-11.54 % in all 6 runs, i.e. chance. No label leakage in the pipeline. |
+| **Exploratory tau_m sweep, 50-1200 ps** (validation, final epoch, 5 seeds) | 50 ps 81.65 %, 100 ps 92.49 %, 200 ps 94.19 %, 350 ps 94.84 %, 503.8 ps 95.02 %, 800 ps 95.53 %, 1200 ps 95.29 %. Steep rise to about 200 ps, flat from about 350 ps. The 50 ps arm was still improving at epoch 10 and may be undertrained. No clear optimum: 800 ps leads, 1200 ps is not distinguishable. |
+| **Long tau_m, 2 / 3 / 5 ns** (validation, final epoch, 5 seeds; hypothesis H6) | 2 ns 95.61 %, 3 ns 95.42 %, 5 ns 95.43 %. No drop and no change past the 2.5 ns window. Paired gains over 503.8 ps are +0.26 to +0.59 pp with paired sd 0.4-0.6 pp, so not resolved from noise. H6 (window artefact) is not supported in this range. |
 
 Caveats that matter: validation accuracy is measured on a fixed 10k hold-out of a 50k training split (the
 authors train on 60k); the runner, not the upstream code, is treated as the main suspect for any gap, and a
@@ -68,7 +72,9 @@ pairs are skipped. About 45 min per run with 3 workers on an i7-10510U, 8 GB; cl
 `jobs/` job CSVs | `ledger/` one JSON per run and logs | `physics/` macrospin and mumax3 scripts | `upstream/mtj` pinned upstream code.
 
 ## Not done yet
-Exploratory sweep analysis; G2 control (queued); stricter replication of G0; gate G1b (mumax3 at Ku1 of 3, 4,
-5e5 on a fast GPU); per-arm learning-rate tuning; protocol freeze and confirmatory runs (12 seeds per arm,
-heavy part on Kaggle); answers to the open questions in protocol Appendix C (which build produced the
-authors' number; Joy's accuracy-vs-anisotropy data and which device parameters she varied).
+Stricter replication of G0 (unmodified upstream script, seed 42, 60k training; the runner is the main suspect for the
+gap, so this will be rerun whatever the sweep shows); gate G1b (mumax3 at Ku1 of 3, 4, 5e5 on a fast GPU);
+per-arm learning-rate tuning and more epochs (the 50 ps arm); a T = 50 control and a linear-leak arm (not yet in the
+runner); protocol v0.3 (record G0-G3 and sweep results, rule for non-learning seeds); protocol freeze and confirmatory
+runs (12 seeds per arm, heavy part on Kaggle); answers to the open questions in protocol Appendix C (which build
+produced the authors' number; Joy's accuracy-vs-anisotropy data and which device parameters she varied).
