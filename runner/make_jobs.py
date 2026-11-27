@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Generate job CSVs. Reserved seed ranges (never reuse across purposes):
-   explore 0-4 | G0 0-4 | G3 100-109 | tune 200-201 | confirm: CSPRNG draw at freeze (not here).
-Usage: python runner/make_jobs.py g0|g2|g3|explore|ext
+   explore 0-4 (+5-11 for the 'more' extension) | G0 0-4 | G3 100-109 | tune 200-201 | confirm: CSPRNG draw at freeze (not here).
+Usage: python runner/make_jobs.py g0|g2|g3|explore|ext|more
 """
 import csv
 import sys
@@ -35,6 +35,8 @@ elif what == "g3":    # seed noise on the reference arm
     write("g3", [row("G3", "ref", s) for s in range(100, 110)])
 elif what == "ext":   # v0.2 extension arms (H6 window test): tau beyond the 2.5 ns window, README build
     write("ext", [row("explore", f"tau{t}", s, tau=t) for t in (2000, 3000, 5000) for s in range(5)])
+elif what == "more":  # exploratory extension: seeds 5-11 on the arms that decide the knee/plateau; seed-major so every finished seed is a complete paired set
+    write("more", [row("explore", f"tau{t}", s, tau=t) for s in range(5, 12) for t in (350, 503.8, 800, 2000)])
 elif what == "explore":
     write("explore", [row("explore", f"tau{t}", s, tau=t) for t in TAUS for s in range(5)])
 else:

@@ -1,0 +1,50 @@
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] n = 12
+
+=== FINAL EPOCH ===
+tau    350: mean 94.97  sd 0.28  95%CI [94.79, 95.15]  min 94.45 max 95.42
+tau  503.8: mean 95.03  sd 0.36  95%CI [94.80, 95.26]  min 94.26 max 95.49
+tau    800: mean 95.42  sd 0.21  95%CI [95.28, 95.55]  min 94.96 max 95.73
+tau   2000: mean 95.51  sd 0.29  95%CI [95.33, 95.70]  min 95.00 max 96.09
+paired differences (second minus first), 95% CI, t-test p, exact sign-flip p (n=12), Holm over 6 pairs
+     350 - 503.8 : -0.06 pp  [-0.38, +0.25]  t p 0.670  perm p 0.668  Holm 0.670  seeds higher 5/12
+     800 - 503.8 : +0.39 pp  [+0.13, +0.64]  t p 0.007  perm p 0.008  Holm 0.020  seeds higher 10/12
+    2000 - 800   : +0.10 pp  [-0.06, +0.26]  t p 0.208  perm p 0.228  Holm 0.415  seeds higher 7/12
+    2000 - 503.8 : +0.48 pp  [+0.22, +0.75]  t p 0.002  perm p 0.001  Holm 0.008  seeds higher 11/12
+     800 - 350   : +0.45 pp  [+0.24, +0.66]  t p 0.001  perm p 0.001  Holm 0.003  seeds higher 11/12
+    2000 - 350   : +0.55 pp  [+0.31, +0.79]  t p 0.000  perm p 0.002  Holm 0.002  seeds higher 10/12
+  Friedman over the 4 arms: p 0.001
+  equivalence 800 vs 2000 (margin +-0.3 pp): diff +0.10, 90% CI [-0.03, +0.23] -> equivalent; (margin +-0.5): equivalent
+
+=== LAST-3-EPOCH MEAN ===
+tau    350: mean 94.66  sd 0.35  95%CI [94.44, 94.88]  min 93.94 max 95.14
+tau  503.8: mean 94.70  sd 0.32  95%CI [94.50, 94.90]  min 94.22 max 95.16
+tau    800: mean 95.13  sd 0.17  95%CI [95.02, 95.24]  min 94.86 max 95.39
+tau   2000: mean 95.22  sd 0.17  95%CI [95.12, 95.33]  min 94.87 max 95.43
+paired differences (second minus first), 95% CI, t-test p, exact sign-flip p (n=12), Holm over 6 pairs
+     350 - 503.8 : -0.04 pp  [-0.35, +0.27]  t p 0.776  perm p 0.775  Holm 0.776  seeds higher 7/12
+     800 - 503.8 : +0.43 pp  [+0.26, +0.60]  t p 0.000  perm p 0.001  Holm 0.001  seeds higher 11/12
+    2000 - 800   : +0.10 pp  [-0.04, +0.23]  t p 0.157  perm p 0.161  Holm 0.314  seeds higher 8/12
+    2000 - 503.8 : +0.53 pp  [+0.33, +0.72]  t p 0.000  perm p 0.000  Holm 0.001  seeds higher 12/12
+     800 - 350   : +0.47 pp  [+0.23, +0.71]  t p 0.001  perm p 0.000  Holm 0.003  seeds higher 12/12
+    2000 - 350   : +0.57 pp  [+0.32, +0.81]  t p 0.000  perm p 0.001  Holm 0.001  seeds higher 11/12
+  Friedman over the 4 arms: p 0.000
+  equivalence 800 vs 2000 (margin +-0.3 pp): diff +0.10, 90% CI [-0.02, +0.21] -> equivalent; (margin +-0.5): equivalent
+
+=== seed-level view (final epoch): every seed, arms 350 / 503.8 / 800 / 2000 ===
+  s0  95.14  95.19  95.48  96.09
+  s1  94.91  94.26  95.48  95.67
+  s2  94.45  95.34  95.57  95.43
+  s3  94.56  94.99  95.39  95.22
+  s4  95.13  95.34  95.73  95.64
+  s5  94.68  95.37  94.96  95.44
+  s6  95.18  94.92  95.58  95.80
+  s7  95.10  95.49  95.36  95.45
+  s8  94.97  94.86  95.33  95.41
+  s9  95.42  94.88  95.35  95.26
+  s10 95.14  94.58  95.16  95.00
+  s11 94.93  95.15  95.61  95.76
+
+sd of paired diff 800-503.8 across seeds 0-4 vs seeds 5-11 (does the early edge hold on fresh seeds?)
+  seeds 0-4: +0.51   seeds 5-11 (fresh): +0.30  (n=7, 95% CI +-0.37)
+  2000-503.8: seeds 0-4: +0.59   seeds 5-11: +0.41
+  350-503.8: seeds 0-4: -0.19   seeds 5-11: +0.02

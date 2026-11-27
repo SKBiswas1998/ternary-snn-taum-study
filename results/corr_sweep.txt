@@ -1,0 +1,52 @@
+runs: 78
+
+=== 1. Accuracy vs tau_m transforms (Spearman rho, all runs, and by regime) ===
+  log10 tau_m            all: +0.76   tau<800 ps: +0.81   tau>=800 ps: +0.12  (n=39 on the plateau)
+  leak per step dt/tau   all: -0.76   tau<800 ps: -0.81   tau>=800 ps: -0.12  (n=39 on the plateau)
+  beta = exp(-dt/tau)    all: +0.76   tau<800 ps: +0.81   tau>=800 ps: +0.12  (n=39 on the plateau)
+  Pearson r of accuracy with (dt/tau)^1.59 (the fitted form): -0.931  -> variance explained 87 %
+
+=== 2. What else moves with tau_m? Spearman of each run statistic with log10 tau_m (all runs) ===
+  layer-1 firing rate            rho -0.80
+  layer-2 firing rate            rho -0.88
+  layer-3 firing rate            rho +0.79
+  layer-1 negative-spike share   rho +0.41
+  layer-2 negative share         rho +0.49
+  layer-3 negative share         rho +0.75
+  output spike scale             rho +0.78
+  final train accuracy           rho +0.91
+
+=== 3. Does a statistic predict accuracy WITHIN an arm? (arm means removed, so tau_m cannot confound) ===
+  layer-1 firing rate            rho +0.12  95% boot [-0.13, +0.35]  p 0.315  (n=68, tau >= 200 ps)
+  layer-2 firing rate            rho +0.11  95% boot [-0.14, +0.33]  p 0.391  (n=68, tau >= 200 ps)
+  layer-3 firing rate            rho +0.25  95% boot [-0.02, +0.47]  p 0.043  (n=68, tau >= 200 ps)
+  layer-1 negative-spike share   rho +0.16  95% boot [-0.09, +0.40]  p 0.184  (n=68, tau >= 200 ps)
+  layer-2 negative share         rho -0.21  95% boot [-0.43, +0.05]  p 0.090  (n=68, tau >= 200 ps)
+  layer-3 negative share         rho +0.26  95% boot [+0.03, +0.50]  p 0.029  (n=68, tau >= 200 ps)
+  output spike scale             rho +0.26  95% boot [+0.01, +0.49]  p 0.033  (n=68, tau >= 200 ps)
+  epoch-1 validation accuracy    rho -0.05  95% boot [-0.32, +0.21]  p 0.667  (n=68, tau >= 200 ps)
+  epoch-3 validation accuracy    rho +0.03  95% boot [-0.24, +0.28]  p 0.797  (n=68, tau >= 200 ps)
+  final train accuracy           rho +0.23  95% boot [-0.02, +0.44]  p 0.062  (n=68, tau >= 200 ps)
+
+=== 4. Is the seed a shared nuisance? Seed effect shared across arms (tau 350/503.8/800/2000, seeds 0-11) ===
+  mean pairwise correlation across seeds +0.14  (range -0.21 to +0.54); with 12 seeds a value must exceed about +-0.58 to be significant
+
+=== 5. Does early learning speed predict the final result? (within arm, tau >= 200 ps) ===
+  validation at epoch 1 vs final: rho -0.05
+  validation at epoch 3 vs final: rho +0.03
+  validation at epoch 5 vs final: rho +0.03
+
+=== 6. Generalisation gap: train minus validation accuracy by arm ===
+  tau     50: train - val = +0.18 pp  (n=5)
+  tau    100: train - val = +0.81 pp  (n=5)
+  tau    200: train - val = +0.67 pp  (n=5)
+  tau    350: train - val = +0.64 pp  (n=12)
+  tau  503.8: train - val = +0.68 pp  (n=12)
+  tau    800: train - val = +0.43 pp  (n=12)
+  tau   1200: train - val = +0.79 pp  (n=5)
+  tau   2000: train - val = +0.59 pp  (n=12)
+  tau   3000: train - val = +0.70 pp  (n=5)
+  tau   5000: train - val = +0.71 pp  (n=5)
+  rho(gap, log tau) = +0.09
+
+wrote fig5_correlations.png

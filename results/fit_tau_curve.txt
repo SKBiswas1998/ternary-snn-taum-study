@@ -1,0 +1,23 @@
+Fits to arm means (weighted). rss = weighted residual sum of squares; AICc uses k parameters, 10 points.
+
+exp   A - B*exp(-tau/t0)
+   p0 =   95.427   95% boot [  95.352,   95.520]
+   p1 =    8.650   95% boot [   4.163,   18.199]
+   p2 =  107.211   95% boot [  70.824,  182.697]
+   weighted rss   26.4   AICc   19.7   max |residual| 8.35 pp
+
+power A - B*(dt/tau)^p
+   p0 =   95.518   95% boot [  95.424,   95.624]
+   p1 =    3.880   95% boot [   3.277,    4.488]
+   p2 =    1.595   95% boot [   1.323,    1.873]
+   weighted rss   15.0   AICc   14.0   max |residual| 2.14 pp
+
+beta  A - B*(1-beta)^p, beta=exp(-dt/tau)
+   p0 =   95.471   95% boot [  95.384,   95.581]
+   p1 =   11.655   95% boot [   7.686,   17.631]
+   p2 =    2.361   95% boot [   1.823,    2.927]
+   weighted rss   20.0   AICc   16.9   max |residual| 5.55 pp
+
+lowest AICc: power A - B*(dt/tau)^p
+
+Residuals for the lowest-AICc model (pp): {'50': -2.14, '100': 0.85, '200': -0.05, '350': -0.15, '503.8': -0.2, '800': 0.15, '1200': -0.16, '2000': 0.12, '3000': -0.08, '5000': -0.08}
